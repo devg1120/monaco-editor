@@ -59,6 +59,7 @@ self.MonacoEnvironment = {
 }
 
 let markdown = `
+<link href="/neos-normalize.css" rel="stylesheet"></link>
 
 > Blockquote
 
