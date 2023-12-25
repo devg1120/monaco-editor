@@ -58,6 +58,9 @@ self.MonacoEnvironment = {
   }
 }
 
+//<link href="/neos-normalize.css" rel="stylesheet"></link>
+//<link href="/github-markdown-css/github-markdown-dark.css" rel="stylesheet"></link>
+
 let markdown = `
 <link href="/neos-normalize.css" rel="stylesheet"></link>
 
