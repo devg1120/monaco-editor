@@ -158,11 +158,10 @@ console.error(reporter(file))
 `;
 
 const placeholder = document.getElementById("in");
-const session = monaco.editor.createModel(markdown,'markdown');
 
 const editor = monaco.editor.create(placeholder, {
-  //value: markdown,
-  //language: "markdown",
+  value: markdown,
+  language: "markdown",
   lineNumbers: "on",
   roundedSelection: true,
   scrollBeyondLastLine: false,
@@ -172,11 +171,11 @@ const editor = monaco.editor.create(placeholder, {
 });
 
 
-//const model = editor.getModel()
+const model = editor.getModel()
 
 const editor2 = monaco.editor.create(document.getElementById("in2"), {
-  //value: markdown,
-  //language: "markdown",
+  value: markdown,
+  language: "markdown",
   lineNumbers: "on",
   roundedSelection: true,
   scrollBeyondLastLine: false,
@@ -185,8 +184,7 @@ const editor2 = monaco.editor.create(document.getElementById("in2"), {
   automaticLayout: false,
 })
 
-editor.setModel(session);
-editor2.setModel(session);
+editor.setModel(model);
 
 editor.getModel().onDidChangeContent((event) => {
   console.log("editor modify");
