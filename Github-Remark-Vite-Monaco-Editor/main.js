@@ -1,22 +1,9 @@
-//import './style.css'
 import * as monaco from "monaco-editor";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
-/*
-onst unified = require('unified');
-const remarkParse = require('remark-parse');
-const remarkFrontmatter = require('remark-frontmatter');
-const remarkSlug = require('remark-slug');
-const remarkToc = require('remark-toc');
-const remarkRehype = require('remark-rehype');
-const rehypeAutolinkHeadings = require('rehype-autolink-headings');
-const rehypePrism = require('@neos21/rehype-prism');
-const rehypeStringify = require('rehype-stringify');
-const rehypeFormat = require('rehype-format');
-*/
 
 import { unified } from "unified";
 //import {stream} from 'unified-stream'
@@ -183,6 +170,15 @@ const editor = monaco.editor.create(placeholder, {
   automaticLayout: false,
 });
 
+editor.getModel().onDidChangeContent((event) => {
+  console.log("editor modify");
+  //console.log(editor.getValue());
+});
+
+editor.onDidChangeCursorPosition(e => {
+   console.log("cur pos:",editor.getPosition());
+});
+
 const parent = placeholder.parentElement;
 
 window.addEventListener("resize", () => {
@@ -196,9 +192,7 @@ let input = document.getElementById("in");
 let output = document.getElementById("out");
 
 function buttonClick() {
-  console.log("Click");
   let value = editor.getValue();
-  console.log(value);
   md2html(value);
 }
 
@@ -206,9 +200,6 @@ let edit = document.getElementById("EDIT");
 edit.addEventListener("click", editClick);
 
 function editClick() {
-  console.log("editClick");
-  console.log(input.style.display);
-  console.log(input);
   if (output.style.left == "0%") {
     output.style.left = "50%";
   } else {
@@ -216,16 +207,91 @@ function editClick() {
   }
 }
 
-/*
-function inspect(input) {
-   
-   const parsed = processor.parse(input);
-   console.log(inspect(parsed));
-   const transformed = processor.runSync(parsed);
-   console.log(inspect(transformed));
+let sync = document.getElementById("SYNC");
+sync.addEventListener("click", mouseoverEventSetting );
+
+let move = document.getElementById("IVEW");
+move.addEventListener("click", elementScrollintoView );
+
+function mouseoverEventSetting() {
+     let body = document.getElementById("out");
+
+     function walkTheDOM(node, func) {
+         func(node);
+         node = node.firstChild;
+         while (node) {
+             walkTheDOM(node, func);
+             node = node.nextSibling;
+         }
+     }
+     function sync(event) {
+	     event.stopPropagation()
+             const line = parseInt(event.target.getAttribute("start_line"));
+
+             //editor.revealLine(line);
+             editor.revealLineInCenter(line);
+	     editor.setPosition({
+                 lineNumber: line,
+                 column: 0,
+             });
+
+     }
+
+     walkTheDOM(body, function (node) {
+         if (node.nodeType === 1) { 
+               node.addEventListener('click', sync);
+	 }
+     });
+
+
 
 }
-*/
+
+
+let last_time_sync_node = null;
+
+function elementScrollintoView(){
+   const pos = editor.getPosition();
+   const line = pos?.lineNumber;
+
+     let body = document.getElementById("out");
+
+     function walkTheDOM(node, func) {
+         func(node);
+         node = node.firstChild;
+         while (node) {
+             walkTheDOM(node, func);
+             node = node.nextSibling;
+         }
+     }
+
+
+     walkTheDOM(body, function (node) {
+         if (node.nodeType === 1) { 
+
+             const start_line = parseInt(node.getAttribute("start_line"));
+             const end_line   = parseInt(node.getAttribute("end_line"));
+
+             if ( line >= start_line && end_line >= line ) {
+		    node.scrollIntoView(
+                             {
+                               behavior: "smooth",
+                               block: "center",
+                               inline: "start"
+                             }
+		            );
+                    node.style.backgroundColor = "red";
+                    if (last_time_sync_node != null) {
+		        last_time_sync_node.style.backgroundColor = "";
+		    }
+		    last_time_sync_node = node;
+                    return;
+	     }
+
+	 }
+     });
+
+}
 
 function md2html(input) {
   //reference
@@ -291,5 +357,8 @@ unified()
   const html = processor.stringify(hast);
 	console.log(html)
   output.innerHTML = html
+
+  //mouseoverEventSetting(output);
+
 
 }
