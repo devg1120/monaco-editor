@@ -26,14 +26,23 @@ const rehypeAttrs: Plugin<[RehypeAttrsOptions?], Root> = (options = {}) => {
     }
 }
 */
-                const pos  = node.position
-                //const start: any = node.position.start;
+                const start_line   = node.position?.start?.line;
+                const start_column = node.position?.start?.column;
+                const start_offset = node.position?.start?.offset;
+                const end_line     = node.position?.end?.line;
+                const end_column   = node.position?.end?.column;
+                const end_offset   = node.position?.end?.offset;
 	        
-                console.log("pos:",pos)
-                console.log(typeof pos)
-                //console.log("start:",start)
-                //console.log(node.position['start']['line'])
-                //console.log("end:" +node.position.end.line)
+		const attr = { 
+			      start_line   : start_line,
+			      start_column : start_column,
+			      start_offset : start_offset,
+			      end_line     : end_line ,
+			      end_column   : end_column ,
+			      end_offset   : end_offset
+		             };
+
+            node.properties = propertiesHandle(node.properties, attr, properties) as Properties
 
 /*
       if (codeBlockParames && node.tagName === 'pre' && node && Array.isArray(node.children) && parent && Array.isArray(parent.children) && parent.children.length > 1) {
