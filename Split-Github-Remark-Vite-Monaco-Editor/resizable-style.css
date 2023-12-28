@@ -7,16 +7,16 @@
   left: 0;
 }
 */
-/*
+
 .contentWindow{
   position: absolute;
 }
-*/
+
 
 .resizer{
   position: absolute;
   z-index: 100;
-  background-color: #000000;
+  background-color: #6495ED;
 }
 
 .verticalResizer{

@@ -26,6 +26,8 @@ Resizable.initialise = function(parentId, initialSizes, resizerThickness){
   var parentWindow = new Resizable.ContentWindow(null, parseInt(parent.style.width, 10), parseInt(parent.style.height, 10), parent);
   Resizable.activeContentWindows.push(parentWindow);
   Resizable.setupChildren(parentWindow);
+
+  return parentWindow;
 };
 
 Resizable.setupChildren = function(parentWindow){
@@ -50,6 +52,13 @@ Resizable.setupChildren = function(parentWindow){
   Resizable.setupChildren(childWindow2);
 
 };
+
+function abc() {
+	console.log("abc");
+}
+
+let resize_callback = null;
+
 
 Resizable.ContentWindow = class{
   
@@ -98,9 +107,11 @@ Resizable.ContentWindow = class{
 
     Resizable.activeContentWindows.push(this);
     this.calculateSizeFractionOfParent();
-
   }
 
+  setResizeCallback(f) {
+        resize_callback = f;
+  }
   getDiv(){
     return document.getElementById(this.divId);
   }
@@ -182,6 +193,10 @@ Resizable.ContentWindow = class{
     this.repositionChildResizer();
     
     Resizable.windowResized();
+
+    if (typeof resize_callback === 'function') {
+         resize_callback() ;
+    }
 
   }
 

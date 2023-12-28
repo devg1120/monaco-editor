@@ -34,6 +34,19 @@ import rehypeLineno from 'rehype-lineno';
 import {Resizable} from './resizable.js';
 
 
+let resizer = null;
+
+function test_func() {
+
+    console.log("call test func");
+
+}
+
+const  test_func2 = () => {
+
+    console.log("call test func 2");
+
+}
  document.addEventListener("DOMContentLoaded", () => {
                         //...
 	                init();
@@ -52,8 +65,9 @@ import {Resizable} from './resizable.js';
 
                         //let resizerThickness = 2;
                         //Resizable.initialise("main", sizes, resizerThickness);
-                        Resizable.initialise("main", {});
-
+                        //resizer = Resizable.initialise("main", {}, null, test_func2);
+                        resizer = Resizable.initialise("main", {},5 );
+                        resizer.setResizeCallback(test_func);
                 });
 
 window.addEventListener("resize", () => {
@@ -204,8 +218,8 @@ editor = monaco.editor.create(placeholder, {
   roundedSelection: true,
   scrollBeyondLastLine: false,
   readOnly: false,
-  theme: "vs-dark",
-  automaticLayout: false,
+  //theme: "vs-dark",
+  automaticLayout: true,
 });
 
 
@@ -218,8 +232,8 @@ editor2 = monaco.editor.create(document.getElementById("in2"), {
   roundedSelection: true,
   scrollBeyondLastLine: false,
   readOnly: false,
-  theme: "vs-dark",
-  automaticLayout: false,
+  //theme: "vs-dark",
+  automaticLayout: true,
 })
 
 editor.setModel(session);
