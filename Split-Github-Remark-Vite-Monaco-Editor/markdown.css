@@ -1,0 +1,19 @@
+#markdown  p {
+     border-left: 8px solid #CCC;
+}
+
+#markdown pre {
+  background-color: #000;
+  color: #fff;
+
+}
+
+#markdown table {
+    border-collapse: collapse;
+}
+
+#markdown th, td {
+    padding: 5px;
+    border: 1px solid red;
+}
+
